@@ -1,0 +1,96 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Alex Brush', cursive;
+}
+
+.centered {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center; /* If you want to center text as well */
+}
+
+.centering-container {
+    width: 100%;
+}
+
+.smallFlowers {
+    height: 150px;
+}
+
+.mainText {
+    font-size: 80px;
+}
+
+.flowers {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.goldText {
+    color: #C2AA7B;
+    font-weight: 100;
+}
+
+.purpleText {
+    color: #cb2a7c;
+    font-family: 'Josefin Sans', sans-serif;
+}
+
+.mainImage {
+    border: #C2AA7B;
+    border-style: solid;
+    border-width: 6px;
+    width: 800px;
+    min-width: 200px;
+    margin-bottom: 3%;
+}
+
+.smallFlowers {
+    width: auto; /* Adjust as needed */
+    margin-bottom: 2%;
+    margin-top: 2%;
+}
+
+.card-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.video {
+    border: 3px solid #C2AA7B;
+    margin-bottom: 3%;
+}
+
+.card {
+    margin: 10px;
+    padding: 0;
+    border: 3px solid #C2AA7B; /* Ensure there's a border */
+    overflow: hidden; /* Ensure the image does not overflow the card */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer; /* Indicate that the card is clickable */
+}
+
+.card-img-top {
+    object-fit: cover; /* Ensure the image covers the card dimensions */
+    object-position: center; /* Center the image */
+}
+
+.gold-bg {
+    background-color: #C2AA7B;
+}
+
+.modal-body img {
+    max-width: 100%;
+    height: auto;
+    max-height: 80vh; /* Ensure the image does not exceed 80% of the viewport height */
+}
+
+.d-none {
+    display: none;
+}

@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Ana & Rick Wedding</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="centered">
+        <img src="https://i.ibb.co/4T0NfD6/Banner2.jpg" class="flowers" alt="flowers">
+    </div>
+    <div class="goldText centered">
+        <h1 class="mainText">Ana & Rick</h1>
+    </div>
+    <div class="centered">
+        <h5 class="purpleText">July 6, 2024 · Barcelona · Spain</h5>
+    </div>
+    <div class="centering-container centered">
+        <img class="mainImage" src="src/assets/A&Rphoto110.jpg" alt="main">
+    </div>
+    <div class="centered">
+        <h4 class="purpleText">Thank you for joining us and celebrating our wedding!</h4>
+    </div>
+    <div class="centered">
+        <img class="smallFlowers" src="https://i.ibb.co/w7jVhZ2/Flowers2.png" alt="additional">
+    </div>
+    <div class="centered">
+        <iframe class="video" width="800" height="450" src="https://www.youtube.com/embed/Bv9OemI2qqA" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen title="Ana & Ricky Wedding Teaser"></iframe>
+    </div>
+    <div>
+        <h1 class="centered goldText">Photos</h1>
+    </div>
+    <div class="card-container centered" id="photoContainer">
+        <!-- Photos will be inserted here by JavaScript -->
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="photoModal" tabindex="-1" aria-labelledby="photoModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="photoModalLabel">Image Preview</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <img id="modalImage" src="" class="img-fluid" alt="Selected">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="scripts.js"></script>
+</body>
+</html>
