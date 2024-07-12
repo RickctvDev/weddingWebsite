@@ -8,7 +8,7 @@ body, html {
     display: flex;
     justify-content: center;
     align-items: center;
-    text-align: center; /* If you want to center text as well */
+    text-align: center;
 }
 
 .centering-container {
@@ -49,7 +49,7 @@ body, html {
 }
 
 .smallFlowers {
-    width: auto; /* Adjust as needed */
+    width: auto;
     margin-bottom: 2%;
     margin-top: 2%;
 }
@@ -68,29 +68,99 @@ body, html {
 .card {
     margin: 10px;
     padding: 0;
-    border: 3px solid #C2AA7B; /* Ensure there's a border */
-    overflow: hidden; /* Ensure the image does not overflow the card */
+    border: 3px solid #C2AA7B;
+    overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
-    cursor: pointer; /* Indicate that the card is clickable */
+    cursor: pointer;
 }
 
 .card-img-top {
-    object-fit: cover; /* Ensure the image covers the card dimensions */
-    object-position: center; /* Center the image */
+    object-fit: cover;
+    object-position: center;
 }
 
 .gold-bg {
     background-color: #C2AA7B;
 }
 
+.modal-body {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+}
+
 .modal-body img {
     max-width: 100%;
-    height: auto;
-    max-height: 80vh; /* Ensure the image does not exceed 80% of the viewport height */
+    max-height: 100%;
+    margin: auto;
+}
+
+.carousel-container {
+    margin-top: 10px;
+}
+
+#carouselThumbnails {
+    display: flex;
+    overflow-x: auto;
+    white-space: nowrap;
+    padding: 0;
+    margin: 0;
+    position: relative;
+}
+
+#carouselThumbnails img {
+    height: 60px;
+    margin: 0 5px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: transform 0.3s ease; /* Add transition for smooth resizing */
+}
+
+#carouselThumbnails img.active {
+    border: 2px solid #cb2a7c;
+}
+
+#carouselThumbnails img.large-thumbnail {
+    transform: scale(1.3); /* Scale up the active thumbnail */
+}
+
+
+.btn-gold {
+    background-color: #C2AA7B;
+    color: white;
+}
+
+.btn-gold:hover {
+    background-color: #b59a6d;
+    color: white;
 }
 
 .d-none {
     display: none;
+}
+
+@media only screen and (max-width: 600px) {
+    .mainText {
+        font-size: 40px;
+    }
+}
+
+.btn-gold.position-absolute {
+    top: 50%;
+    transform: translateY(-50%);
+    margin-left: 2%;
+    margin-right: 2%;
+    font-family: 'Josefin Sans', sans-serif;
+}
+
+.btn-gold.start-0 {
+    left: 10px;
+}
+
+.btn-gold.end-0 {
+    right: 10px;
 }
