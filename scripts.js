@@ -51,12 +51,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (activeThumbnail) {
             const containerWidth = carouselThumbnails.clientWidth;
             const scrollLeft = activeThumbnail.offsetLeft + activeThumbnail.clientWidth / 2 - containerWidth / 2;
-            console.log("Thumbnail Width: ", activeThumbnail.clientWidth);
-            console.log("Container Width: ", containerWidth);
-            console.log("Active Thumbnail Offset Left: ", activeThumbnail.offsetLeft);
-            console.log("Scroll Position: ", scrollLeft);
             carouselThumbnails.scrollLeft = scrollLeft;
-            console.log("After Scroll - Scroll Left: ", carouselThumbnails.scrollLeft);
         }
     }
 
