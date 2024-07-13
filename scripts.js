@@ -10,6 +10,11 @@ document.addEventListener("DOMContentLoaded", function () {
     let currentIndex = 0;
     const maxRetries = 3;
 
+    // Update year dynamically
+    const yearElement = document.getElementById("yearIs");
+    const currentYear = new Date().getFullYear();
+    yearElement.textContent = currentYear;
+
     const images = [];
     for (let i = 1; i <= 163; i++) {
         const paddedNumber = String(i).padStart(3, '0');
