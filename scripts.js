@@ -8,6 +8,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const nextImageBtn = document.getElementById("nextImage");
     const carouselThumbnails = document.getElementById("carouselThumbnails");
     let currentIndex = 0;
+    const maxRetries = 3;
 
     const images = [];
     for (let i = 1; i <= 163; i++) {
@@ -16,16 +17,44 @@ document.addEventListener("DOMContentLoaded", function () {
         images.push(imagePath);
     }
 
-    images.forEach((src, index) => {
-        const card = document.createElement("div");
-        card.className = "card";
-        card.style.width = "18rem";
-        card.innerHTML = `<img class="card-img-top" src="${src}" alt="Card ${index}">`;
-        card.addEventListener("click", () => {
-            showImage(index);
+    function loadImage(src, retries, callback) {
+        const img = new Image();
+        img.src = src;
+        img.onload = () => callback(null, img);
+        img.onerror = () => {
+            if (retries > 0) {
+                console.log(`Retrying to load image: ${src}, retries left: ${retries - 1}`);
+                setTimeout(() => loadImage(src, retries - 1, callback), 500);
+            } else {
+                callback(new Error(`Failed to load image: ${src}`), img);
+            }
+        };
+    }
+
+    function loadAllImages(callback) {
+        let loadedImages = 0;
+        const totalImages = images.length;
+        images.forEach((src, index) => {
+            loadImage(src, maxRetries, (err, img) => {
+                if (err) {
+                    console.error(err.message);
+                } else {
+                    const card = document.createElement("div");
+                    card.className = "card";
+                    card.style.width = "18rem";
+                    card.innerHTML = `<img class="card-img-top" src="${img.src}" alt="Card ${index}">`;
+                    card.addEventListener("click", () => {
+                        showImage(index);
+                    });
+                    photoContainer.appendChild(card);
+                }
+                loadedImages++;
+                if (loadedImages === totalImages) {
+                    callback();
+                }
+            });
         });
-        photoContainer.appendChild(card);
-    });
+    }
 
     function showImage(index) {
         currentIndex = index;
@@ -51,7 +80,12 @@ document.addEventListener("DOMContentLoaded", function () {
         if (activeThumbnail) {
             const containerWidth = carouselThumbnails.clientWidth;
             const scrollLeft = activeThumbnail.offsetLeft + activeThumbnail.clientWidth / 2 - containerWidth / 2;
+            console.log("Thumbnail Width: ", activeThumbnail.clientWidth);
+            console.log("Container Width: ", containerWidth);
+            console.log("Active Thumbnail Offset Left: ", activeThumbnail.offsetLeft);
+            console.log("Scroll Position: ", scrollLeft);
             carouselThumbnails.scrollLeft = scrollLeft;
+            console.log("After Scroll - Scroll Left: ", carouselThumbnails.scrollLeft);
         }
     }
 
@@ -77,13 +111,10 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    const allImages = document.querySelectorAll(".card-img-top");
-    allImages.forEach(img => {
-        img.addEventListener("error", () => {
-            console.error(`Failed to load image: ${img.src}`);
-        });
-        img.addEventListener("load", () => {
-            console.log(`Successfully loaded image: ${img.src}`);
-        });
+    // Load all images initially and then update the UI
+    loadAllImages(() => {
+        console.log("All images loaded successfully.");
+        // Initialize the thumbnails and other UI components as needed
+        updateThumbnails();
     });
 });
