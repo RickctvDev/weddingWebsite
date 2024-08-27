@@ -8,75 +8,67 @@ document.addEventListener("DOMContentLoaded", function () {
     const nextImageBtn = document.getElementById("nextImage");
     const carouselThumbnails = document.getElementById("carouselThumbnails");
     let currentIndex = 0;
-    const maxRetries = 3;
+    const imagesPerBatch = 50; // Number of images to load per batch
+    const totalImages = 662; // Assuming there are 700 images
+    const maxRetries = 3; // Number of times to retry loading an image
+    const problemImageStartIndex = 661; // Index where issues begin (adjusted for zero-indexing)
 
     // Update year dynamically
     const yearElement = document.getElementById("yearIs");
     const currentYear = new Date().getFullYear();
     yearElement.textContent = currentYear;
 
-    const images = [];
-for (let i = 1; i <= 163; i++) {
-    const imagePath = `src/assets/A&Rphoto${i}.jpg`; // No padding here
-    images.push(imagePath);
-}
+    // Function to load a batch of images
+    function loadImageBatch(startIndex) {
+        const fragment = document.createDocumentFragment();
+        for (let i = startIndex; i < startIndex + imagesPerBatch && i < totalImages; i++) {
+            const imagePath = `src/assets/A&Rphoto${i + 1}.jpg`;
+            const card = document.createElement("div");
+            card.className = "card";
+            card.style.width = "18rem";
+            loadImageWithFallback(card, imagePath, i);
+            fragment.appendChild(card);
+        }
+        photoContainer.appendChild(fragment);
+        currentIndex += imagesPerBatch;
+        updateThumbnails(); // Update thumbnails as more images are loaded
+    }
 
-    function loadImage(src, retries, callback) {
+    // Function to load an image with retries and fallback
+    function loadImageWithFallback(card, src, index, retries = maxRetries) {
         const img = new Image();
         img.src = src;
-        img.onload = () => callback(null, img);
+        img.onload = () => {
+            card.innerHTML = `<img class="card-img-top" src="${img.src}" loading="lazy" alt="Card ${index + 1}">`;
+            card.addEventListener("click", () => showImage(index));
+        };
         img.onerror = () => {
             if (retries > 0) {
                 console.log(`Retrying to load image: ${src}, retries left: ${retries - 1}`);
-                setTimeout(() => loadImage(src, retries - 1, callback), 500);
+                setTimeout(() => loadImageWithFallback(card, src, index, retries - 1), 500);
             } else {
-                callback(new Error(`Failed to load image: ${src}`), img);
+                console.error(`Failed to load image: ${src}. Displaying placeholder.`);
+                card.innerHTML = `<div class="card-img-top placeholder" style="height: 18rem; background-color: #ddd; display: flex; align-items: center; justify-content: center;">Image Not Available</div>`;
             }
         };
     }
 
-    function loadAllImages(callback) {
-        let loadedImages = 0;
-        const totalImages = images.length;
-        images.forEach((src, index) => {
-            loadImage(src, maxRetries, (err, img) => {
-                if (err) {
-                    console.error(err.message);
-                } else {
-                    const card = document.createElement("div");
-                    card.className = "card";
-                    card.style.width = "18rem";
-                    card.innerHTML = `<img class="card-img-top" src="${img.src}" alt="Card ${index}">`;
-                    card.addEventListener("click", () => {
-                        showImage(index);
-                    });
-                    photoContainer.appendChild(card);
-                }
-                loadedImages++;
-                if (loadedImages === totalImages) {
-                    callback();
-                }
-            });
-        });
-    }
-
     function showImage(index) {
-        currentIndex = index;
-        modalImage.src = images[currentIndex];
+        modalImage.src = `src/assets/A&Rphoto${index + 1}.jpg`;
         photoModal.show();
         updateThumbnails();
-        setTimeout(scrollToCurrentThumbnail, 300); // Ensure scroll happens after the modal is fully rendered
+        setTimeout(scrollToCurrentThumbnail, 300);
     }
 
     function updateThumbnails() {
         carouselThumbnails.innerHTML = '';
-        images.forEach((src, index) => {
+        for (let i = 0; i < currentIndex; i++) {
             const thumbnail = document.createElement("img");
-            thumbnail.src = src;
-            thumbnail.className = index === currentIndex ? 'active large-thumbnail' : '';
-            thumbnail.addEventListener("click", () => showImage(index));
+            thumbnail.src = `src/assets/A&Rphoto${i + 1}.jpg`;
+            thumbnail.className = i === currentIndex ? 'active large-thumbnail' : '';
+            thumbnail.addEventListener("click", () => showImage(i));
             carouselThumbnails.appendChild(thumbnail);
-        });
+        }
     }
 
     function scrollToCurrentThumbnail() {
@@ -84,25 +76,20 @@ for (let i = 1; i <= 163; i++) {
         if (activeThumbnail) {
             const containerWidth = carouselThumbnails.clientWidth;
             const scrollLeft = activeThumbnail.offsetLeft + activeThumbnail.clientWidth / 2 - containerWidth / 2;
-            console.log("Thumbnail Width: ", activeThumbnail.clientWidth);
-            console.log("Container Width: ", containerWidth);
-            console.log("Active Thumbnail Offset Left: ", activeThumbnail.offsetLeft);
-            console.log("Scroll Position: ", scrollLeft);
             carouselThumbnails.scrollLeft = scrollLeft;
-            console.log("After Scroll - Scroll Left: ", carouselThumbnails.scrollLeft);
         }
     }
 
     prevImageBtn.addEventListener("click", () => {
-        currentIndex = (currentIndex - 1 + images.length) % images.length;
+        currentIndex = (currentIndex - 1 + totalImages) % totalImages;
         showImage(currentIndex);
-        setTimeout(scrollToCurrentThumbnail, 300); // Ensure scroll happens after the modal is fully rendered
+        setTimeout(scrollToCurrentThumbnail, 300);
     });
 
     nextImageBtn.addEventListener("click", () => {
-        currentIndex = (currentIndex + 1) % images.length;
+        currentIndex = (currentIndex + 1) % totalImages;
         showImage(currentIndex);
-        setTimeout(scrollToCurrentThumbnail, 300); // Ensure scroll happens after the modal is fully rendered
+        setTimeout(scrollToCurrentThumbnail, 300);
     });
 
     document.addEventListener("keydown", (event) => {
@@ -115,10 +102,21 @@ for (let i = 1; i <= 163; i++) {
         }
     });
 
-    // Load all images initially and then update the UI
-    loadAllImages(() => {
-        console.log("All images loaded successfully.");
-        // Initialize the thumbnails and other UI components as needed
-        updateThumbnails();
-    });
+    // Infinite scroll logic to load more images when the user scrolls down
+    function onScroll() {
+        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 500) {
+            if (currentIndex < problemImageStartIndex) {
+                loadImageBatch(currentIndex);
+            } else {
+                // Load remaining images (662 onwards) in one go
+                loadImageBatch(problemImageStartIndex);
+                window.removeEventListener('scroll', onScroll); // Stop infinite scroll after all images are loaded
+            }
+        }
+    }
+
+    window.addEventListener('scroll', onScroll);
+
+    // Initial load of images
+    loadImageBatch(0);
 });
