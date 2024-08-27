@@ -16,11 +16,10 @@ document.addEventListener("DOMContentLoaded", function () {
     yearElement.textContent = currentYear;
 
     const images = [];
-    for (let i = 1; i <= 163; i++) {
-        const paddedNumber = String(i).padStart(3, '0');
-        const imagePath = `src/assets/A&Rphoto${paddedNumber}.jpg`;
-        images.push(imagePath);
-    }
+for (let i = 1; i <= 163; i++) {
+    const imagePath = `src/assets/A&Rphoto${i}.jpg`; // No padding here
+    images.push(imagePath);
+}
 
     function loadImage(src, retries, callback) {
         const img = new Image();
